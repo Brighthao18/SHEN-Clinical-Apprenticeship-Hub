@@ -8,9 +8,10 @@
 | OS-004 | 个人独立实例，课题组各自部署 | 不增加多用户、共享账户协作或同机正式多实例承诺 |
 | OS-005 | 合成 demo 与正式环境分离 | demo 固定公开密钥，localhost:3200；后端 internal 网络，Web 单独入口网络；正式本机生成新密钥 |
 | OS-006 | 公开部署使用 Valkey / Redis 协议 | Celery/客户端不改协议；必须验证 broker、backend、持久性、重试和过期；不替换现有真实部署 |
+| OS-007 | 公开仓库命名为 SHEN-Clinical-Apprenticeship-Hub | 2026-10-05，按用户要求突出一站式临床师承知识管理；保留 SHEN 品牌与现有功能边界，不改写已发布版本的标签和附件 |
 
 现有冻结边界：摄取/Validator、身份和剂量、Vision 白名单与一次调用、确定性处方 Diff、单次小上下文纵向分析、追加写作版本均保留。traceable 未映射药名为 pending，不可追溯药名阻断。保守日常导入不设20–30例前置门槛；准确率只基于明确确认的 Gold，工程测试不是临床指标。
 
 待独立决定：新医院语义、新平台/模型、多人协作、公网配置、RAG/相似医案/老师规律分析。每项需定义输入、范围、临床风险、合成反例和验收，不在本次打包中静默开启。
 
-2026-10-05，用户要求上传发布，公开源码仓库确定为 [Brighthao18/SHEN](https://github.com/Brighthao18/SHEN)，私密漏洞报告入口已启用。发布保持 v0.2.0-rc.1 预览版定位，只上传审阅过的源码、校验清单与合成验收附件；原私有项目、真实资料和容器镜像不上传。GitHub 执行与公开版本状态以仓库 Actions 和 Releases 为准。
+2026-10-05，用户要求上传发布，公开源码仓库确定为 [Brighthao18/SHEN-Clinical-Apprenticeship-Hub](https://github.com/Brighthao18/SHEN-Clinical-Apprenticeship-Hub)，原名称为 Brighthao18/SHEN，私密漏洞报告入口已启用。发布保持 v0.2.0-rc.1 预览版定位，只上传审阅过的源码、校验清单与合成验收附件；原私有项目、真实资料和容器镜像不上传。GitHub 执行与公开版本状态以仓库 Actions 和 Releases 为准。

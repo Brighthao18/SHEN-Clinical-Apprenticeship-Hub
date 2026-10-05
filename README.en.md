@@ -1,16 +1,16 @@
-# SHEN
+# SHEN · Clinical Apprenticeship Hub
 
-Local-first, single-user Chinese medicine apprenticeship workspace. SHEN preserves source evidence, organizes patient timelines, compares prescriptions deterministically, and retains append-only apprenticeship writing versions. Open-source preview **v0.2.0-rc.1**, Apache-2.0, copyright FU HAO.
+SHEN brings clinical records, patient timelines, prescription comparison, and apprenticeship writing into one local-first, single-user workspace for Chinese medicine. It preserves source evidence, compares prescriptions deterministically, and retains append-only apprenticeship writing versions. Open-source preview **v0.2.0-rc.1**, Apache-2.0, copyright FU HAO.
 
 ## Try the synthetic demo
 
 Docker Engine 28+ (including Docker Desktop) and Docker Compose v2.24.4+ are required. From the repository root:
 
-Download and extract the source package from [GitHub Releases](https://github.com/Brighthao18/SHEN/releases), or clone the repository:
+Download and extract the source package from [GitHub Releases](https://github.com/Brighthao18/SHEN-Clinical-Apprenticeship-Hub/releases), or clone the repository:
 
 ```sh
-git clone https://github.com/Brighthao18/SHEN.git
-cd SHEN
+git clone https://github.com/Brighthao18/SHEN-Clinical-Apprenticeship-Hub.git
+cd SHEN-Clinical-Apprenticeship-Hub
 ```
 
 ```sh

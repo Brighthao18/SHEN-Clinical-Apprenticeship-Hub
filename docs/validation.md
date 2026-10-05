@@ -1,6 +1,6 @@
 # 候选验证记录
 
-版本 v0.2.0-rc.1，2026-10-05。以下记录公开发布前完成的本地工程验收；GitHub 实际运行结果以[仓库 Actions](https://github.com/Brighthao18/SHEN/actions)为准，本地检查不能替代线上运行。
+版本 v0.2.0-rc.1，2026-10-05。以下记录公开发布前完成的本地工程验收；GitHub 实际运行结果以[仓库 Actions](https://github.com/Brighthao18/SHEN-Clinical-Apprenticeship-Hub/actions)为准，本地检查不能替代线上运行。
 
 | 检查 | 实际范围与结果 |
 | --- | --- |

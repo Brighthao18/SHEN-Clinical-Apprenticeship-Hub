@@ -1,8 +1,8 @@
-# SHEN · 师承临床知识库
+# SHEN · 一站式临床师承知识管理
 
 [English](README.en.md) · [入门](docs/getting-started.md) · [正式部署](docs/deployment.md) · [隐私边界](docs/privacy-boundaries.md)
 
-SHEN 是面向中医师承学习的本地优先工具：保留来源文件与 OCR，整理患者时间线，确定性比较处方，并保存可追溯的跟师笔记和医案版本。当前为 **v0.2.0-rc.1 开源预览版**，Apache-2.0 许可，版权署名 FU HAO。
+SHEN 是面向中医师承学习、本地优先的一站式临床知识管理工具：保留来源文件与 OCR，整理患者时间线，确定性比较处方，并保存可追溯的跟师笔记和医案版本。当前为 **v0.2.0-rc.1 开源预览版**，Apache-2.0 许可，版权署名 FU HAO。
 
 适合个人独立部署；课题组成员各自保管数据库、资料和密钥。当前仍是单用户应用。现有摄取规则围绕 JNU 门诊和旧版处方场景，其他医院的身份与剂量语义需要单独验证。工程测试不代表临床准确率或机构级生产就绪。
 
@@ -10,11 +10,11 @@ SHEN 是面向中医师承学习的本地优先工具：保留来源文件与 OC
 
 需要 Docker Engine 28 或更新版本（可通过 Docker Desktop 提供）和 Docker Compose v2.24.4 或更新版本。首次构建需要联网下载依赖；演示后端服务隔离外网，网页使用单独的本机入口网络。
 
-从 [GitHub 版本发布页](https://github.com/Brighthao18/SHEN/releases)下载源码包并解压，或克隆仓库：
+从 [GitHub 版本发布页](https://github.com/Brighthao18/SHEN-Clinical-Apprenticeship-Hub/releases)下载源码包并解压，或克隆仓库：
 
 ```sh
-git clone https://github.com/Brighthao18/SHEN.git
-cd SHEN
+git clone https://github.com/Brighthao18/SHEN-Clinical-Apprenticeship-Hub.git
+cd SHEN-Clinical-Apprenticeship-Hub
 ```
 
 在仓库根目录运行：
