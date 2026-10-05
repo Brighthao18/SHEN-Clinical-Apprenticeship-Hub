@@ -1,0 +1,56 @@
+{
+  "patient_code": "P980001",
+  "encounters": [
+    {
+      "label": "synthetic-longitudinal-01",
+      "encounter_at": "2026-08-01T00:00:00+00:00",
+      "source": "physician_record",
+      "chief_complaint": "睡眠差，腹胀",
+      "symptoms": [
+        {"name": "睡眠差", "normalized": "睡眠", "trend": "new"},
+        {"name": "腹胀", "normalized": "腹胀", "trend": "new"}
+      ],
+      "diagnosis": "脾气虚",
+      "items": [
+        {"drug": "酸枣仁", "dose": "10", "scope": "per_decoction"},
+        {"drug": "白术", "dose": "10", "scope": "per_decoction"},
+        {"drug": "半夏", "dose": null, "scope": "per_decoction"},
+        {"drug": "知母", "dose": "6", "scope": "per_decoction"}
+      ]
+    },
+    {
+      "label": "synthetic-longitudinal-02",
+      "encounter_at": "2026-08-08T00:00:00+00:00",
+      "source": "ai_normalized",
+      "chief_complaint": "睡眠较前改善，腹胀仍有",
+      "symptoms": [
+        {"name": "睡眠较前改善", "normalized": "睡眠", "trend": "improved"},
+        {"name": "腹胀仍有", "normalized": "腹胀", "trend": "persistent"}
+      ],
+      "diagnosis": "脾气虚",
+      "items": [
+        {"drug": "酸枣仁", "dose": "20", "scope": "per_decoction"},
+        {"drug": "白术", "dose": "15", "scope": "per_decoction"},
+        {"drug": "半夏", "dose": null, "scope": "per_decoction"},
+        {"drug": "麦冬", "dose": "10", "scope": "per_decoction"}
+      ]
+    },
+    {
+      "label": "synthetic-longitudinal-03",
+      "encounter_at": "2026-08-15T00:00:00+00:00",
+      "source": "physician_record",
+      "chief_complaint": "腹胀减轻",
+      "symptoms": [
+        {"name": "腹胀减轻", "normalized": "腹胀", "trend": "improved"}
+      ],
+      "diagnosis": "脾气虚",
+      "student_note": {"note_kind": "pulse", "content": "脉象由学生补录，不能视为医生原始记录"},
+      "items": [
+        {"drug": "酸枣仁", "dose": "20", "scope": "per_decoction"},
+        {"drug": "白术", "dose": "15", "scope": "per_decoction"},
+        {"drug": "半夏", "dose": "5", "scope": "per_decoction"},
+        {"drug": "麦冬", "dose": "10", "scope": "per_decoction"}
+      ]
+    }
+  ]
+}

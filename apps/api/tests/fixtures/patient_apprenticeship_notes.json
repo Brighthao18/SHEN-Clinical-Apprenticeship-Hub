@@ -1,0 +1,43 @@
+{
+  "patient_code": "P-SYN-0901",
+  "encounters": [
+    {
+      "label": "syn-note-case-1",
+      "encounter_at": "2026-08-03T09:20:00",
+      "source": "physician_record",
+      "chief_complaint": "腹胀两周",
+      "diagnosis": "脾虚气滞",
+      "symptoms": [
+        {"name": "腹胀", "normalized": "腹胀", "trend": "new"}
+      ],
+      "items": [
+        {"drug": "党参", "dose": "10", "scope": "per_decoction"},
+        {"drug": "白术", "dose": "10", "scope": "per_decoction"}
+      ],
+      "student_note": {
+        "note_kind": "teacher_oral",
+        "content": "老师口头记录：脾虚宜运脾，不必峻补。"
+      }
+    },
+    {
+      "label": "syn-note-case-2",
+      "encounter_at": "2026-08-10T09:00:00",
+      "source": "ai_normalized",
+      "chief_complaint": "腹胀减轻，仍乏力",
+      "diagnosis": "脾虚气滞",
+      "symptoms": [
+        {"name": "腹胀", "normalized": "腹胀", "trend": "persistent"},
+        {"name": "乏力", "normalized": "乏力", "trend": "new"}
+      ],
+      "items": [
+        {"drug": "党参", "dose": "10", "scope": "per_decoction"},
+        {"drug": "白术", "dose": "15", "scope": "per_decoction"},
+        {"drug": "陈皮", "dose": "6", "scope": "per_decoction"}
+      ],
+      "student_note": {
+        "note_kind": "student_observation",
+        "content": "患者自述睡眠一般，未记录舌脉。"
+      }
+    }
+  ]
+}

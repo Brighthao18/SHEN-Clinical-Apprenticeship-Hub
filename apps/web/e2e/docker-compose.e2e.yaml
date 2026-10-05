@@ -1,0 +1,25 @@
+# e2e 专属隔离数据库：独立 Compose 项目（shen-e2e）+ 独立数据卷，
+# 与开发栈（compose.yaml 的 db 服务）完全隔离——不会重建或触碰现有
+# 开发数据库容器。仅本目录的 runner（run.mjs）启动与清理。
+name: shen-e2e
+
+services:
+  db:
+    image: pgvector/pgvector:pg17@sha256:cf134a767f474095eeba57e0117be8e568e011a63f33fbf252f14c9b760f8e6f
+    environment:
+      POSTGRES_DB: shen_e2e
+      POSTGRES_USER: shen
+      POSTGRES_PASSWORD: shen-e2e-password
+    ports:
+      - "127.0.0.1:5433:5432"
+    volumes:
+      - e2e_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U shen -d shen_e2e"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+      start_period: 5s
+
+volumes:
+  e2e_pgdata:

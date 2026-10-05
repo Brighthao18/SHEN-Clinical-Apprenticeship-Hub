@@ -1,0 +1,126 @@
+{
+  "schema_version": "1.0",
+  "patient_code": "P900001",
+  "previous": {
+    "encounter_at": "2026-07-10T00:00:00+00:00",
+    "items": [
+      {
+        "raw_drug_name": "白术",
+        "canonical_drug_name": "白术",
+        "processing_method": null,
+        "calculated_dose_g": "10",
+        "dose_scope": "per_decoction",
+        "normalization_status": "normalized"
+      },
+      {
+        "raw_drug_name": "黄芪",
+        "canonical_drug_name": "黄芪",
+        "processing_method": null,
+        "calculated_dose_g": "15",
+        "dose_scope": "per_decoction",
+        "normalization_status": "normalized"
+      },
+      {
+        "raw_drug_name": "甘草",
+        "canonical_drug_name": "甘草",
+        "processing_method": null,
+        "calculated_dose_g": "6",
+        "dose_scope": "per_decoction",
+        "normalization_status": "normalized"
+      },
+      {
+        "raw_drug_name": "茯苓",
+        "canonical_drug_name": "茯苓",
+        "processing_method": null,
+        "calculated_dose_g": "12",
+        "dose_scope": "per_decoction",
+        "normalization_status": "normalized"
+      },
+      {
+        "raw_drug_name": "陈皮",
+        "canonical_drug_name": "陈皮",
+        "processing_method": null,
+        "calculated_dose_g": "6",
+        "dose_scope": "per_decoction",
+        "normalization_status": "normalized"
+      },
+      {
+        "raw_drug_name": "法半夏",
+        "canonical_drug_name": "半夏",
+        "processing_method": "法制",
+        "calculated_dose_g": null,
+        "dose_scope": "per_decoction",
+        "normalization_status": "normalized"
+      },
+      {
+        "raw_drug_name": "夜交藤",
+        "canonical_drug_name": null,
+        "processing_method": null,
+        "calculated_dose_g": "15",
+        "dose_scope": "per_decoction",
+        "normalization_status": "pending"
+      }
+    ]
+  },
+  "current": {
+    "encounter_at": "2026-07-24T00:00:00+00:00",
+    "items": [
+      {
+        "raw_drug_name": "炒白术",
+        "canonical_drug_name": "白术",
+        "processing_method": "炒制",
+        "calculated_dose_g": "10",
+        "dose_scope": "per_decoction",
+        "normalization_status": "normalized"
+      },
+      {
+        "raw_drug_name": "黄芪",
+        "canonical_drug_name": "黄芪",
+        "processing_method": null,
+        "calculated_dose_g": "20",
+        "dose_scope": "per_decoction",
+        "normalization_status": "normalized"
+      },
+      {
+        "raw_drug_name": "甘草",
+        "canonical_drug_name": "甘草",
+        "processing_method": null,
+        "calculated_dose_g": "3",
+        "dose_scope": "per_decoction",
+        "normalization_status": "normalized"
+      },
+      {
+        "raw_drug_name": "茯苓",
+        "canonical_drug_name": "茯苓",
+        "processing_method": null,
+        "calculated_dose_g": "12",
+        "dose_scope": "per_decoction",
+        "normalization_status": "normalized"
+      },
+      {
+        "raw_drug_name": "法半夏",
+        "canonical_drug_name": "半夏",
+        "processing_method": "法制",
+        "calculated_dose_g": "9",
+        "dose_scope": "per_decoction",
+        "normalization_status": "normalized"
+      },
+      {
+        "raw_drug_name": "夜交藤",
+        "canonical_drug_name": null,
+        "processing_method": null,
+        "calculated_dose_g": "20",
+        "dose_scope": "per_decoction",
+        "normalization_status": "pending"
+      },
+      {
+        "raw_drug_name": "麦冬",
+        "canonical_drug_name": "麦冬",
+        "processing_method": null,
+        "calculated_dose_g": "10",
+        "dose_scope": "per_decoction",
+        "normalization_status": "normalized"
+      }
+    ]
+  }
+}

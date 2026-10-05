@@ -1,0 +1,84 @@
+name: Public source checks
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+env:
+  NEXT_TELEMETRY_DISABLED: '1'
+  COREPACK_ENABLE_DOWNLOAD_PROMPT: '0'
+jobs:
+  public-tree:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.12'
+      - run: python scripts/check_public_tree.py
+      - run: python -m compileall -q scripts examples
+  backend:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      db:
+        image: pgvector/pgvector:pg17@sha256:cf134a767f474095eeba57e0117be8e568e011a63f33fbf252f14c9b760f8e6f
+        env:
+          POSTGRES_DB: shen_ci_test
+          POSTGRES_USER: shen
+          POSTGRES_PASSWORD: synthetic-ci-password
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U shen -d shen_ci_test"
+          --health-interval 2s --health-timeout 3s --health-retries 30
+    env:
+      TEST_DATABASE_URL: postgresql+psycopg://shen:synthetic-ci-password@127.0.0.1:5432/shen_ci_test
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.12'
+      - run: python scripts/shen.py setup
+      - run: work/venv/bin/ruff check apps/api/app apps/api/tests apps/api/alembic
+      - name: Empty PostgreSQL migration and metadata validation
+        working-directory: apps/api
+        env:
+          DATABASE_URL: ${{ env.TEST_DATABASE_URL }}
+        run: |
+          ../../work/venv/bin/python -m alembic upgrade head
+          ../../work/venv/bin/python -m alembic check
+      - run: python scripts/shen.py test-api
+  frontend-e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        with:
+          node-version: '24'
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.12'
+      - run: corepack enable && corepack pnpm install --frozen-lockfile
+      - run: python scripts/shen.py setup
+      - run: corepack pnpm lint:web && corepack pnpm test:web
+      - run: corepack pnpm audit --prod --audit-level low
+      - run: corepack pnpm --filter @shen/web exec playwright install --with-deps chromium
+      - run: corepack pnpm --filter @shen/web test:e2e
+  demo:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - name: Build and start isolated synthetic demo
+        run: docker compose --env-file examples/demo/demo.env -f compose.demo.yaml up --build -d --wait --wait-timeout 180
+      - name: Check the published localhost browser entry
+        run: python -c "import urllib.request; assert urllib.request.urlopen('http://127.0.0.1:3200/login', timeout=15).status == 200"
+      - name: Confirm idempotent seeding
+        run: docker compose --env-file examples/demo/demo.env -f compose.demo.yaml run --rm seed
+      - name: Stop only this CI demo
+        if: always()
+        run: docker compose --env-file examples/demo/demo.env -f compose.demo.yaml down --volumes

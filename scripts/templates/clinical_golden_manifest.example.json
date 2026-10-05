@@ -1,0 +1,15 @@
+{
+  "schema_version": "2.0",
+  "dataset_id": "SYNTHETIC_EXAMPLE_ONLY",
+  "purpose": "public_schema_example_not_clinical_benchmark",
+  "cases": [
+    {
+      "case_id": "synthetic-jnu-case-001",
+      "document_id": "00000000-0000-0000-0000-000000000001",
+      "case_role": "fully_synthetic_example",
+      "image": "images/synthetic-jnu-case-001.jpg",
+      "gold": "gold/synthetic-jnu-case-001.json",
+      "expected_match_case_id": null
+    }
+  ]
+}

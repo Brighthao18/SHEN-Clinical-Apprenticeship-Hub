@@ -1,0 +1,26 @@
+name: 工程问题 / 合成复现
+description: 仅提交版本、错误码和从零构造的复现
+body:
+  - type: markdown
+    attributes:
+      value: 不要上传真实病例、原图/OCR、密钥、数据库或完整生产日志。安全漏洞使用 SECURITY.md 中的私密渠道。
+  - type: input
+    id: version
+    attributes:
+      label: 版本与运行平台
+      placeholder: 0.2.0-rc.1 / Windows x64 / Docker Compose version
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: 合成复现步骤、期望行为与稳定错误码
+    validations:
+      required: true
+  - type: checkboxes
+    id: synthetic
+    attributes:
+      label: 资料边界
+      options:
+        - label: 复现资料从零构造，不包含真实临床或身份内容及凭证。
+          required: true

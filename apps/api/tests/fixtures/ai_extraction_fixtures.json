@@ -1,0 +1,165 @@
+{
+  "version": 1,
+  "note": "Mock ClinicalAIExtractor fixtures (Phase 6). De-identified extraction payloads keyed by sha256 of evidence_key(ocr_text): NFKC -> MinerU markup flattened -> all whitespace removed. A fixture only ever answers for the exact OCR text it was annotated against; anything else fails closed (AI_EXTRACTION_PROVIDER_FAILED). Missing clinical facts must stay null - never inferred.",
+  "entries": {
+    "f0ea9aabcc70be0a2c7d02db59971c8ceaaa9c3862adf65c50b8e20a8f4bb4e3": {
+      "patient": {
+        "real_name": "张三",
+        "sex": "male",
+        "age": 70,
+        "medical_record_number": "JNU-000128"
+      },
+      "encounter": {
+        "hospital": "暨南大学附属第一医院",
+        "department": "中医科门诊",
+        "physician": "沈老师",
+        "encounter_date": "2026-08-14",
+        "chief_complaint": "腹痛，夜尿多，睡眠有改善，头晕",
+        "present_illness": null,
+        "past_history": "胰十二指肠切除术",
+        "allergy": "未记录",
+        "vital_signs": null,
+        "advice": null,
+        "treatment_record": null
+      },
+      "symptoms": [
+        {"text": "腹痛", "status": "present", "trend": null},
+        {"text": "夜尿多", "status": "present", "trend": null},
+        {"text": "睡眠有改善", "status": "present", "trend": "improved"},
+        {"text": "头晕", "status": "present", "trend": null}
+      ],
+      "diagnoses": [
+        {"text": "胰腺术后", "diagnosis_type": "procedure_status", "is_primary": true}
+      ],
+      "prescription": {
+        "total_decoctions": 7,
+        "raw_text": "共7剂\n每日1剂\n每日2次\n一次150ml",
+        "items": [
+          {
+            "original_text": "（基）醋鳖甲（10g）2包",
+            "raw_drug_name": "醋鳖甲",
+            "processing_method": null,
+            "suggested_canonical_name": null,
+            "is_basic_drug": true,
+            "explicit_package_dose_g": 10,
+            "package_count": 2,
+            "package_unit": "包",
+            "confidence": 0.98
+          },
+          {
+            "original_text": "白花蛇舌草（15g）2包",
+            "raw_drug_name": "白花蛇舌草",
+            "processing_method": null,
+            "suggested_canonical_name": null,
+            "is_basic_drug": false,
+            "explicit_package_dose_g": 15,
+            "package_count": 2,
+            "package_unit": "包",
+            "confidence": 0.98
+          },
+          {
+            "original_text": "（基）半枝莲（15g）2包",
+            "raw_drug_name": "半枝莲",
+            "processing_method": null,
+            "suggested_canonical_name": null,
+            "is_basic_drug": true,
+            "explicit_package_dose_g": 15,
+            "package_count": 2,
+            "package_unit": "包",
+            "confidence": 0.98
+          },
+          {
+            "original_text": "茯神（5g）3包",
+            "raw_drug_name": "茯神",
+            "processing_method": null,
+            "suggested_canonical_name": null,
+            "is_basic_drug": false,
+            "explicit_package_dose_g": 5,
+            "package_count": 3,
+            "package_unit": "包",
+            "confidence": 0.98
+          },
+          {
+            "original_text": "（基）知母（10g）1袋",
+            "raw_drug_name": "知母",
+            "processing_method": null,
+            "suggested_canonical_name": null,
+            "is_basic_drug": true,
+            "explicit_package_dose_g": 10,
+            "package_count": 1,
+            "package_unit": "袋",
+            "confidence": 0.98
+          },
+          {
+            "original_text": "（基）枳壳（麸炒）（10g）1包",
+            "raw_drug_name": "枳壳",
+            "processing_method": "麸炒",
+            "suggested_canonical_name": null,
+            "is_basic_drug": true,
+            "explicit_package_dose_g": 10,
+            "package_count": 1,
+            "package_unit": "包",
+            "confidence": 0.98
+          },
+          {
+            "original_text": "（基）柿蒂（10g）1包",
+            "raw_drug_name": "柿蒂",
+            "processing_method": null,
+            "suggested_canonical_name": null,
+            "is_basic_drug": true,
+            "explicit_package_dose_g": 10,
+            "package_count": 1,
+            "package_unit": "包",
+            "confidence": 0.98
+          },
+          {
+            "original_text": "益智仁（10g）1包",
+            "raw_drug_name": "益智仁",
+            "processing_method": null,
+            "suggested_canonical_name": null,
+            "is_basic_drug": false,
+            "explicit_package_dose_g": 10,
+            "package_count": 1,
+            "package_unit": "包",
+            "confidence": 0.98
+          },
+          {
+            "original_text": "（基）桑螵蛸（5g）2包",
+            "raw_drug_name": "桑螵蛸",
+            "processing_method": null,
+            "suggested_canonical_name": null,
+            "is_basic_drug": true,
+            "explicit_package_dose_g": 5,
+            "package_count": 2,
+            "package_unit": "包",
+            "confidence": 0.98
+          },
+          {
+            "original_text": "红景天2袋",
+            "raw_drug_name": "红景天",
+            "processing_method": null,
+            "suggested_canonical_name": null,
+            "is_basic_drug": false,
+            "explicit_package_dose_g": null,
+            "package_count": 2,
+            "package_unit": "袋",
+            "confidence": 0.95
+          },
+          {
+            "original_text": "藏红曲1袋",
+            "raw_drug_name": "藏红曲",
+            "processing_method": null,
+            "suggested_canonical_name": null,
+            "is_basic_drug": false,
+            "explicit_package_dose_g": null,
+            "package_count": 1,
+            "package_unit": "袋",
+            "confidence": 0.95
+          }
+        ]
+      },
+      "extraction_warnings": [],
+      "confidence": 0.98
+    }
+  }
+}

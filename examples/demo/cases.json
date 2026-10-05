@@ -1,0 +1,17 @@
+[
+  {
+    "file": "visit-1.png",
+    "ocr": "visit-1.txt",
+    "expected": "ACCEPTED"
+  },
+  {
+    "file": "visit-2.png",
+    "ocr": "visit-2.txt",
+    "expected": "ACCEPTED"
+  },
+  {
+    "file": "visit-3.png",
+    "ocr": "visit-3.txt",
+    "expected": "UNRESOLVED"
+  }
+]

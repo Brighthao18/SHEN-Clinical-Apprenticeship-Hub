@@ -1,0 +1,12 @@
+{
+  "name": "@humanfs/types",
+  "version": "0.15.0",
+  "license": "Apache-2.0",
+  "author": {
+    "name": "Nicholas C. Zakas"
+  },
+  "repository": {
+    "url": "git+https://github.com/humanwhocodes/humanfs.git",
+    "type": "git"
+  }
+}

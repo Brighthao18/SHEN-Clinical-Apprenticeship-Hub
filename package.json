@@ -1,0 +1,13 @@
+{
+  "name": "shen-clinical-knowledge",
+  "version": "0.2.0-rc.1",
+  "private": true,
+  "packageManager": "pnpm@11.19.0",
+  "scripts": {
+    "dev:web": "pnpm --filter @shen/web dev",
+    "build:web": "pnpm --filter @shen/web build",
+    "lint:web": "pnpm --filter @shen/web lint",
+    "test:web": "pnpm --filter @shen/web test"
+  },
+  "license": "Apache-2.0"
+}

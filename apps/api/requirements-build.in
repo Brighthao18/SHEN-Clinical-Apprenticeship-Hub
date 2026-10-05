@@ -1,0 +1,2 @@
+# Build tooling is also included in both hash-locked installation files.
+setuptools>=80

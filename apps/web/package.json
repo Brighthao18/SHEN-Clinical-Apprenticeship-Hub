@@ -1,0 +1,32 @@
+{
+  "name": "@shen/web",
+  "version": "0.2.0-rc.1",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint . --max-warnings=0",
+    "test": "tsc --noEmit && node --no-warnings --experimental-strip-types --test tests/*.test.mjs",
+    "test:unit": "node --no-warnings --experimental-strip-types --test tests/*.test.mjs",
+    "test:e2e": "node e2e/run.mjs"
+  },
+  "dependencies": {
+    "lucide-react": "1.35.0",
+    "next": "16.3.8",
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0",
+    "@tailwindcss/postcss": "4.3.3",
+    "@types/node": "26.4.0",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.5",
+    "eslint": "9.39.5",
+    "eslint-config-next": "16.3.8",
+    "tailwindcss": "4.3.3",
+    "typescript": "6.0.3"
+  },
+  "license": "Apache-2.0"
+}

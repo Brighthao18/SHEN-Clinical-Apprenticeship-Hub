@@ -1,0 +1,85 @@
+name: shen-production
+
+x-production-api-environment: &production-api-environment
+  APP_ENV: production
+  APP_VERSION: ${APP_VERSION:-0.2.0-rc.1}
+  APP_TIMEZONE: ${APP_TIMEZONE:-Asia/Singapore}
+  DATABASE_URL: ${DATABASE_URL:?DATABASE_URL is required in .env.production.local}
+  REDIS_URL: redis://redis:6379/0
+  TASKS_EAGER: "false"
+  CELERY_RESULT_EXPIRES_SECONDS: ${CELERY_RESULT_EXPIRES_SECONDS:-604800}
+  STORAGE_BACKEND: local
+  STORAGE_ROOT: /app/data/storage
+  MAX_UPLOAD_BYTES: ${MAX_UPLOAD_BYTES:-26214400}
+  APP_ADMIN_USERNAME: ${APP_ADMIN_USERNAME:-admin}
+  APP_ADMIN_PASSWORD: ""
+  APP_ADMIN_PASSWORD_HASH: ${APP_ADMIN_PASSWORD_HASH:?APP_ADMIN_PASSWORD_HASH is required}
+  JWT_SECRET: ${JWT_SECRET:?JWT_SECRET is required}
+  JWT_EXPIRE_MINUTES: ${JWT_EXPIRE_MINUTES:-480}
+  PII_ENCRYPTION_SECRET: ${PII_ENCRYPTION_SECRET:?PII_ENCRYPTION_SECRET is required}
+  PII_HASH_SECRET: ${PII_HASH_SECRET:?PII_HASH_SECRET is required}
+  OCR_PROVIDER: ${OCR_PROVIDER:-mock}
+  MINERU_BASE_URL: ${MINERU_BASE_URL:-https://mineru.net}
+  MINERU_API_TOKEN: ${MINERU_API_TOKEN:-}
+  MINERU_MODEL_VERSION: ${MINERU_MODEL_VERSION:-vlm}
+  MINERU_LANGUAGE: ${MINERU_LANGUAGE:-ch}
+  MINERU_POLL_INTERVAL_SECONDS: ${MINERU_POLL_INTERVAL_SECONDS:-3}
+  MINERU_TIMEOUT_SECONDS: ${MINERU_TIMEOUT_SECONDS:-300}
+  ALLOW_IDENTIFIABLE_MINERU_UPLOAD: ${ALLOW_IDENTIFIABLE_MINERU_UPLOAD:-false}
+  AI_EXTRACTION_ENABLED: ${AI_EXTRACTION_ENABLED:-true}
+  AI_EXTRACTION_PROVIDER: ${AI_EXTRACTION_PROVIDER:-mock}
+  AI_EXTRACTION_FIXTURE_PATH: /app/app/fixtures/disabled_extraction.json
+  AI_EXTRACTION_ALLOW_IDENTIFIABLE_INPUT: ${AI_EXTRACTION_ALLOW_IDENTIFIABLE_INPUT:-false}
+  AI_PROVIDER_API_KEY: ${AI_PROVIDER_API_KEY:-}
+  AI_PROVIDER_BASE_URL: ${AI_PROVIDER_BASE_URL:-https://open.bigmodel.cn/api/paas/v4}
+  AI_PROVIDER_MODEL: ${AI_PROVIDER_MODEL:-glm-4.7}
+  AI_VERIFICATION_ENABLED: ${AI_VERIFICATION_ENABLED:-false}
+  AI_VISION_VERIFICATION_ENABLED: ${AI_VISION_VERIFICATION_ENABLED:-false}
+  ALLOW_IDENTIFIABLE_AI_VISION_UPLOAD: ${ALLOW_IDENTIFIABLE_AI_VISION_UPLOAD:-false}
+  AI_VISION_PROVIDER_API_KEY: ${AI_VISION_PROVIDER_API_KEY:-}
+  AI_VISION_PROVIDER_BASE_URL: ${AI_VISION_PROVIDER_BASE_URL:-https://open.bigmodel.cn/api/paas/v4}
+  AI_VISION_PROVIDER_MODEL: ${AI_VISION_PROVIDER_MODEL:-glm-4.6v}
+  BACKUP_MANIFEST_DIR: ${BACKUP_MANIFEST_DIR:-}
+  WEB_ORIGIN: ${WEB_ORIGIN:-http://localhost:3100}
+
+services:
+  db:
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:?POSTGRES_DB is required}
+      POSTGRES_USER: ${POSTGRES_USER:?POSTGRES_USER is required}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
+    volumes:
+      - shen_production_postgres_data:/var/lib/postgresql/data
+
+  redis:
+    volumes:
+      - shen_production_redis_data:/data
+
+  api:
+    environment: *production-api-environment
+    volumes: !override
+      - ${PRODUCTION_DOCUMENT_STORAGE:?PRODUCTION_DOCUMENT_STORAGE is required}:/app/data/storage
+    # !override replaces the development port mapping instead of unioning it:
+    # production must never publish the base compose's host port.
+    ports: !override
+      - "127.0.0.1:${PRODUCTION_API_PORT:-8100}:8000"
+
+  worker:
+    environment: *production-api-environment
+    volumes: !override
+      - ${PRODUCTION_DOCUMENT_STORAGE:?PRODUCTION_DOCUMENT_STORAGE is required}:/app/data/storage
+
+  web:
+    environment:
+      API_INTERNAL_URL: http://api:8000
+      NEXT_PUBLIC_APP_NAME: ${NEXT_PUBLIC_APP_NAME:-师承临床知识库}
+      COOKIE_SECURE: ${COOKIE_SECURE:-false}
+      NODE_ENV: production
+    ports: !override
+      - "127.0.0.1:${PRODUCTION_WEB_PORT:-3100}:3000"
+
+volumes:
+  shen_production_postgres_data:
+    name: shen_production_postgres_data
+  shen_production_redis_data:
+    name: shen_production_redis_data

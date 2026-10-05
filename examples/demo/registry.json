@@ -1,0 +1,158 @@
+{
+  "version": 1,
+  "note": "Entirely fictional; exact OCR hash match only",
+  "entries": {
+    "b8daa5261f46b45bddbacfb279aadf8bdeadde90640eb794043834c78c7f9161": {
+      "patient": {
+        "real_name": "演示患者甲",
+        "sex": "female",
+        "age": 32,
+        "medical_record_number": "DEMO-0001"
+      },
+      "encounter": {
+        "hospital": "暨南大学附属第一医院",
+        "department": "合成演示科",
+        "physician": null,
+        "encounter_date": "2026-01-10",
+        "chief_complaint": "咳嗽，晨起较多"
+      },
+      "symptoms": [],
+      "diagnoses": [],
+      "confidence": 1.0,
+      "extraction_warnings": [],
+      "prescription": {
+        "total_decoctions": 3,
+        "raw_text": "共3剂",
+        "items": [
+          {
+            "original_text": "白术（10g）1包",
+            "raw_drug_name": "白术",
+            "processing_method": null,
+            "suggested_canonical_name": null,
+            "is_basic_drug": false,
+            "explicit_package_dose_g": 10,
+            "package_count": 1,
+            "package_unit": "包",
+            "confidence": 1.0
+          },
+          {
+            "original_text": "丹参（10g）1包",
+            "raw_drug_name": "丹参",
+            "processing_method": null,
+            "suggested_canonical_name": null,
+            "is_basic_drug": false,
+            "explicit_package_dose_g": 10,
+            "package_count": 1,
+            "package_unit": "包",
+            "confidence": 1.0
+          },
+          {
+            "original_text": "茯苓1包",
+            "raw_drug_name": "茯苓",
+            "processing_method": null,
+            "suggested_canonical_name": null,
+            "is_basic_drug": false,
+            "explicit_package_dose_g": null,
+            "package_count": 1,
+            "package_unit": "包",
+            "confidence": 1.0
+          }
+        ]
+      }
+    },
+    "66cf8f73f5ec87116efb8f9e298fdcce65b85c01a304d6b9e1e7d705c87866ec": {
+      "patient": {
+        "real_name": "演示患者甲",
+        "sex": "female",
+        "age": 32,
+        "medical_record_number": "DEMO-0001"
+      },
+      "encounter": {
+        "hospital": "暨南大学附属第一医院",
+        "department": "合成演示科",
+        "physician": null,
+        "encounter_date": "2026-01-17",
+        "chief_complaint": "仍有咳嗽"
+      },
+      "symptoms": [],
+      "diagnoses": [],
+      "confidence": 1.0,
+      "extraction_warnings": [],
+      "prescription": {
+        "total_decoctions": 3,
+        "raw_text": "共3剂",
+        "items": [
+          {
+            "original_text": "炒白术（10g）2包",
+            "raw_drug_name": "炒白术",
+            "processing_method": "炒",
+            "suggested_canonical_name": null,
+            "is_basic_drug": false,
+            "explicit_package_dose_g": 10,
+            "package_count": 2,
+            "package_unit": "包",
+            "confidence": 1.0
+          },
+          {
+            "original_text": "黄芪（10g）1包",
+            "raw_drug_name": "黄芪",
+            "processing_method": null,
+            "suggested_canonical_name": null,
+            "is_basic_drug": false,
+            "explicit_package_dose_g": 10,
+            "package_count": 1,
+            "package_unit": "包",
+            "confidence": 1.0
+          },
+          {
+            "original_text": "茯苓1包",
+            "raw_drug_name": "茯苓",
+            "processing_method": null,
+            "suggested_canonical_name": null,
+            "is_basic_drug": false,
+            "explicit_package_dose_g": null,
+            "package_count": 1,
+            "package_unit": "包",
+            "confidence": 1.0
+          }
+        ]
+      }
+    },
+    "967b9e5d343e43b7f1d93b1b34210695b97dd02746522482694160e9e22fdab0": {
+      "patient": {
+        "real_name": "演示患者甲",
+        "sex": "female",
+        "age": 32,
+        "medical_record_number": null
+      },
+      "encounter": {
+        "hospital": "暨南大学附属第一医院",
+        "department": "合成演示科",
+        "physician": null,
+        "encounter_date": "2026-01-24",
+        "chief_complaint": "仅用于缺少病历号的阻断演示"
+      },
+      "symptoms": [],
+      "diagnoses": [],
+      "confidence": 1.0,
+      "extraction_warnings": [],
+      "prescription": {
+        "total_decoctions": 3,
+        "raw_text": "共3剂",
+        "items": [
+          {
+            "original_text": "白术（10g）1包",
+            "raw_drug_name": "白术",
+            "processing_method": null,
+            "suggested_canonical_name": null,
+            "is_basic_drug": false,
+            "explicit_package_dose_g": 10,
+            "package_count": 1,
+            "package_unit": "包",
+            "confidence": 1.0
+          }
+        ]
+      }
+    }
+  }
+}

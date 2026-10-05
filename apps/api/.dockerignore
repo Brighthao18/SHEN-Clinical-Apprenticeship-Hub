@@ -1,0 +1,20 @@
+**
+!pyproject.toml
+!requirements.lock
+!alembic.ini
+!alembic/
+!alembic/**
+!app/
+!app/**
+**/__pycache__
+**/*.pyc
+**/.env*
+
+!LICENSE
+!NOTICE
+**/private_data
+**/private_tools
+**/*.pem
+**/*.dump
+**/case1-5
+**/new cases

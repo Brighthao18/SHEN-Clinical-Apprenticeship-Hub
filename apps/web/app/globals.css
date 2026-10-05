@@ -1,0 +1,69 @@
+@import "tailwindcss";
+
+:root {
+  --paper: #f4f1e9;
+  --paper-deep: #ebe6da;
+  --surface: #fffdf8;
+  --ink: #17221f;
+  --muted: #63706b;
+  --line: #ded9cc;
+  --jade: #1f6857;
+  --jade-soft: #dcebe5;
+  --amber: #9a5d17;
+  --amber-soft: #fff1d7;
+  --danger: #a13b35;
+  --danger-soft: #fbe3df;
+  --blue: #365f80;
+  --blue-soft: #e4eef5;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--paper);
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", system-ui, sans-serif;
+  text-rendering: optimizeLegibility;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+::selection {
+  background: #b9d7cc;
+}
+
+.focus-ring:focus-visible {
+  outline: 3px solid rgb(31 104 87 / 25%);
+  outline-offset: 2px;
+}
+
+.surface {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  box-shadow: 0 1px 2px rgb(23 34 31 / 4%);
+}
+
+.subtle-grid {
+  background-image:
+    linear-gradient(rgb(31 104 87 / 3%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(31 104 87 / 3%) 1px, transparent 1px);
+  background-size: 32px 32px;
+}

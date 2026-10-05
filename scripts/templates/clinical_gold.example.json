@@ -1,0 +1,43 @@
+{
+  "schema_version": "2.0",
+  "case_id": "synthetic-jnu-case-001",
+  "document_id": "00000000-0000-0000-0000-000000000001",
+  "annotation": {
+    "status": "draft",
+    "tool": "local_golden_annotation_v1"
+  },
+  "expected": {
+    "patient_identity": {
+      "real_name": "虚构甲",
+      "medical_record_number": "SYNTHETIC-001"
+    },
+    "patient": {"sex": "male"},
+    "encounter": {
+      "age": 70,
+      "encounter_date": "2026-08-14",
+      "chief_complaint": "完全虚构主诉",
+      "past_history": null,
+      "diagnosis": ["完全虚构诊断"],
+      "physician": "虚构医师"
+    },
+    "prescription": {
+      "item_count": 1,
+      "total_decoctions": 7,
+      "items": [
+        {
+          "line_number": 1,
+          "is_basic_drug": false,
+          "raw_drug_name": "鳖甲",
+          "canonical_drug_name": "鳖甲",
+          "processing_method": null,
+          "explicit_package_dose_g": "10",
+          "package_count": "2",
+          "calculated_dose_g": "20",
+          "dose_scope": "per_decoction"
+        }
+      ]
+    },
+    "patient_match": {"decision": "new_patient", "matched_case_id": null},
+    "validation": {"review_flags": [], "decision": "auto_accept"}
+  }
+}

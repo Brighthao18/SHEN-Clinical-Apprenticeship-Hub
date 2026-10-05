@@ -1,0 +1,109 @@
+name: shen-demo
+x-demo-environment: &demo-env
+  APP_ENV: development
+  APP_VERSION: 0.2.0-rc.1
+  DATABASE_URL: postgresql+psycopg://shen:shen-demo-only@db:5432/shen_demo
+  REDIS_URL: redis://redis:6379/0
+  STORAGE_ROOT: /app/data/storage
+  TASKS_EAGER: "false"
+  OCR_PROVIDER: mock
+  AI_EXTRACTION_ENABLED: "true"
+  AI_EXTRACTION_PROVIDER: mock
+  AI_EXTRACTION_FIXTURE_PATH: /demo/registry.json
+  AI_PROVIDER_API_KEY: ""
+  AI_VISION_PROVIDER_API_KEY: ""
+  AI_VERIFICATION_ENABLED: "false"
+  AI_VISION_VERIFICATION_ENABLED: "false"
+  AI_EXTRACTION_ALLOW_IDENTIFIABLE_INPUT: "false"
+  ALLOW_IDENTIFIABLE_MINERU_UPLOAD: "false"
+  ALLOW_IDENTIFIABLE_AI_VISION_UPLOAD: "false"
+  MINERU_API_TOKEN: ""
+  APP_ADMIN_USERNAME: admin
+  APP_ADMIN_PASSWORD: shen-demo-only
+  JWT_SECRET: shen-demo-jwt-is-public-not-for-real-data
+  PII_ENCRYPTION_SECRET: shen-demo-encryption-is-public
+  PII_HASH_SECRET: shen-demo-hmac-is-public
+  WEB_ORIGIN: http://localhost:3200
+services:
+  db:
+    image: pgvector/pgvector:pg17@sha256:cf134a767f474095eeba57e0117be8e568e011a63f33fbf252f14c9b760f8e6f
+    environment:
+      POSTGRES_DB: shen_demo
+      POSTGRES_USER: shen
+      POSTGRES_PASSWORD: shen-demo-only
+    volumes: [demo_postgres:/var/lib/postgresql/data]
+    healthcheck:
+      test: [CMD-SHELL, pg_isready -U shen -d shen_demo]
+      interval: 2s
+      timeout: 3s
+      retries: 40
+  redis:
+    image: valkey/valkey:8.1.10-alpine@sha256:081c2f5cb575efc901aa80ff9cdbd1ec6a301682fd35e1ebb4b0990a4a4a8507
+    command: [valkey-server, --appendonly, "yes"]
+    volumes: [demo_queue:/data]
+    healthcheck:
+      test: [CMD, valkey-cli, ping]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+  api:
+    build: {context: ./apps/api}
+    image: shen-public-api:0.2.0-rc.1
+    environment: *demo-env
+    command: [sh, -c, "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000"]
+    volumes:
+      - demo_documents:/app/data/storage
+      - ./examples/demo:/demo:ro
+    depends_on:
+      db: {condition: service_healthy}
+      redis: {condition: service_healthy}
+    healthcheck:
+      test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 3s
+      timeout: 3s
+      retries: 40
+  worker:
+    image: shen-public-api:0.2.0-rc.1
+    environment: *demo-env
+    command: [celery, -A, app.workers.celery_app:celery_app, worker, --loglevel=WARNING, --concurrency=1]
+    volumes:
+      - demo_documents:/app/data/storage
+      - ./examples/demo:/demo:ro
+    depends_on:
+      api: {condition: service_healthy}
+  seed:
+    image: shen-public-api:0.2.0-rc.1
+    environment: {DEMO_API_URL: "http://api:8000"}
+    command: [python, /demo/seed_demo.py]
+    volumes: ["./examples/demo:/demo:ro"]
+    depends_on:
+      api: {condition: service_healthy}
+      worker: {condition: service_started}
+    restart: "no"
+  web:
+    build: {context: ., dockerfile: apps/web/Dockerfile}
+    image: shen-public-web:0.2.0-rc.1
+    environment:
+      API_INTERNAL_URL: http://api:8000
+      SHEN_DEMO_MODE: "true"
+      COOKIE_SECURE: "false"
+      NODE_ENV: production
+    ports: ["127.0.0.1:3200:3000"]
+    networks: [default, web_entry]
+    depends_on:
+      api: {condition: service_healthy}
+      seed: {condition: service_completed_successfully}
+    healthcheck:
+      test: [CMD, wget, -qO-, "http://127.0.0.1:3000/login"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+volumes:
+  demo_postgres:
+  demo_queue:
+  demo_documents:
+networks:
+  default:
+    internal: true
+  # Publish the local browser entry without giving API/worker external egress.
+  web_entry:

@@ -1,0 +1,10 @@
+{
+  "name": "language-subtag-registry",
+  "version": "0.3.23",
+  "license": "CC0-1.0",
+  "author": null,
+  "repository": {
+    "url": "git+https://github.com/mattcg/language-subtag-registry.git",
+    "type": "git"
+  }
+}

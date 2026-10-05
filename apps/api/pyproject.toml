@@ -1,0 +1,57 @@
+[build-system]
+requires = ["setuptools>=80"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "shen-clinical-api"
+version = "0.2.0rc1"
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
+authors = [{name = "FU HAO"}]
+description = "Local-first Chinese medicine apprenticeship clinical knowledge API"
+requires-python = ">=3.12"
+dependencies = [
+  "alembic==1.19.1",
+  "celery==5.6.3",
+  "cryptography==50.0.1",
+  "fastapi==0.141.1",
+  "httpx==0.28.1",
+  "psycopg[binary]==3.3.4",
+  "pydantic-settings==2.15.0",
+  "PyJWT==2.15.1",
+  "python-multipart==0.0.32",
+  "redis==8.1.0",
+  "SQLAlchemy==2.0.52",
+  "uvicorn[standard]==0.52.4"
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest==9.1.1",
+  "pytest-cov==7.1.0",
+  "ruff==0.16.5"
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["app*"]
+
+[tool.pytest.ini_options]
+addopts = "-q --strict-markers --disable-warnings"
+testpaths = ["tests"]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+ignore = ["B008"]
+
+[tool.ruff.lint.per-file-ignores]
+# Reviewed migration artifacts: generated DDL lines exceed the normal width.
+"alembic/versions/*" = ["E501", "I001", "UP007", "UP035"]
+
+[tool.coverage.run]
+branch = true
+source = ["app"]

@@ -1,0 +1,142 @@
+name: shen-clinical-knowledge
+
+x-default-logging: &default-logging
+  driver: local
+  options:
+    max-size: "10m"
+    max-file: "10"
+
+services:
+  db:
+    image: pgvector/pgvector:pg17@sha256:cf134a767f474095eeba57e0117be8e568e011a63f33fbf252f14c9b760f8e6f
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-shen}
+      POSTGRES_USER: ${POSTGRES_USER:-shen}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-shen-dev-password}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+    logging: *default-logging
+
+  redis:
+    image: valkey/valkey:8.1.10-alpine@sha256:081c2f5cb575efc901aa80ff9cdbd1ec6a301682fd35e1ebb4b0990a4a4a8507
+    command: ["valkey-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "valkey-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+    logging: *default-logging
+
+  api:
+    build:
+      context: ./apps/api
+    environment: &api-environment
+      APP_ENV: ${APP_ENV:-development}
+      APP_VERSION: ${APP_VERSION:-0.2.0-rc.1}
+      APP_TIMEZONE: ${APP_TIMEZONE:-Asia/Singapore}
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-shen}:${POSTGRES_PASSWORD:-shen-dev-password}@db:5432/${POSTGRES_DB:-shen}
+      REDIS_URL: redis://redis:6379/0
+      TASKS_EAGER: ${TASKS_EAGER:-false}
+      CELERY_RESULT_EXPIRES_SECONDS: ${CELERY_RESULT_EXPIRES_SECONDS:-604800}
+      STORAGE_BACKEND: local
+      STORAGE_ROOT: /app/data/storage
+      MAX_UPLOAD_BYTES: ${MAX_UPLOAD_BYTES:-26214400}
+      APP_ADMIN_USERNAME: ${APP_ADMIN_USERNAME:-admin}
+      APP_ADMIN_PASSWORD: ${APP_ADMIN_PASSWORD-shen-dev-only}
+      APP_ADMIN_PASSWORD_HASH: ${APP_ADMIN_PASSWORD_HASH:-}
+      JWT_SECRET: ${JWT_SECRET:-shen-development-jwt-secret-change-before-real-data}
+      JWT_EXPIRE_MINUTES: ${JWT_EXPIRE_MINUTES:-480}
+      PII_ENCRYPTION_SECRET: ${PII_ENCRYPTION_SECRET:-shen-development-encryption-secret}
+      PII_HASH_SECRET: ${PII_HASH_SECRET:-shen-development-hmac-secret}
+      OCR_PROVIDER: ${OCR_PROVIDER:-mock}
+      MINERU_BASE_URL: ${MINERU_BASE_URL:-https://mineru.net}
+      MINERU_API_TOKEN: ${MINERU_API_TOKEN:-}
+      MINERU_MODEL_VERSION: ${MINERU_MODEL_VERSION:-vlm}
+      MINERU_LANGUAGE: ${MINERU_LANGUAGE:-ch}
+      MINERU_POLL_INTERVAL_SECONDS: ${MINERU_POLL_INTERVAL_SECONDS:-3}
+      MINERU_TIMEOUT_SECONDS: ${MINERU_TIMEOUT_SECONDS:-300}
+      ALLOW_IDENTIFIABLE_MINERU_UPLOAD: ${ALLOW_IDENTIFIABLE_MINERU_UPLOAD:-false}
+      AI_EXTRACTION_ENABLED: ${AI_EXTRACTION_ENABLED:-true}
+      AI_EXTRACTION_PROVIDER: ${AI_EXTRACTION_PROVIDER:-mock}
+      AI_EXTRACTION_ALLOW_IDENTIFIABLE_INPUT: ${AI_EXTRACTION_ALLOW_IDENTIFIABLE_INPUT:-false}
+      AI_PROVIDER_API_KEY: ${AI_PROVIDER_API_KEY:-}
+      AI_PROVIDER_BASE_URL: ${AI_PROVIDER_BASE_URL:-https://open.bigmodel.cn/api/paas/v4}
+      AI_PROVIDER_MODEL: ${AI_PROVIDER_MODEL:-glm-4.7}
+      AI_VERIFICATION_ENABLED: ${AI_VERIFICATION_ENABLED:-false}
+      AI_VISION_VERIFICATION_ENABLED: ${AI_VISION_VERIFICATION_ENABLED:-false}
+      ALLOW_IDENTIFIABLE_AI_VISION_UPLOAD: ${ALLOW_IDENTIFIABLE_AI_VISION_UPLOAD:-false}
+      AI_VISION_PROVIDER_API_KEY: ${AI_VISION_PROVIDER_API_KEY:-}
+      AI_VISION_PROVIDER_BASE_URL: ${AI_VISION_PROVIDER_BASE_URL:-https://open.bigmodel.cn/api/paas/v4}
+      AI_VISION_PROVIDER_MODEL: ${AI_VISION_PROVIDER_MODEL:-glm-4.6v}
+      BACKUP_MANIFEST_DIR: ${BACKUP_MANIFEST_DIR:-}
+      AI_EXTRACTION_FIXTURE_PATH: /demo/registry.json
+      WEB_ORIGIN: ${WEB_ORIGIN:-http://localhost:3000}
+    command: ["sh", "-c", "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000"]
+    volumes:
+      - ./data/storage:/app/data/storage
+      - ./examples/demo:/demo:ro
+    ports:
+      - "127.0.0.1:8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+    logging: *default-logging
+
+  worker:
+    build:
+      context: ./apps/api
+    environment: *api-environment
+    command: ["celery", "-A", "app.workers.celery_app:celery_app", "worker", "--loglevel=INFO", "--concurrency=2"]
+    volumes:
+      - ./data/storage:/app/data/storage
+      - ./examples/demo:/demo:ro
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    logging: *default-logging
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    environment:
+      API_INTERNAL_URL: http://api:8000
+      NEXT_PUBLIC_APP_NAME: ${NEXT_PUBLIC_APP_NAME:-师承临床知识库}
+      COOKIE_SECURE: ${COOKIE_SECURE:-false}
+      NODE_ENV: production
+    ports:
+      - "127.0.0.1:3000:3000"
+    depends_on:
+      api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000/login"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+    logging: *default-logging
+
+volumes:
+  postgres_data:
+  redis_data:
