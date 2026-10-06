@@ -31,12 +31,16 @@ Resolution priority (all slots):
 
 from __future__ import annotations
 
+import logging
 from typing import Any
+from urllib.parse import urlsplit
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.models.domain import ProviderSetting
+
+logger = logging.getLogger(__name__)
 
 PROVIDER_SLOT = "clinical_extraction"
 VISION_PROVIDER_SLOT = "vision_verification"
@@ -54,10 +58,35 @@ SUPPORTED_ADAPTERS = ("live_openai_compatible", "mineru_cloud_api")
 MINERU_ADAPTER = "mineru_cloud_api"
 # ``model`` stores the MinerU model_version for the mineru_ocr slot.
 MINERU_MODEL_VERSIONS = ("vlm", "pipeline")
+# Plain HTTP is only acceptable to a provider on this machine (e.g. Ollama).
+LOCAL_PROVIDER_HOSTS = frozenset({"localhost", "127.0.0.1"})
 
 
 class ProviderConfigRejected(ValueError):
     """Raised when the submitted provider configuration is invalid."""
+
+
+def _is_allowed_base_url(base_url: str) -> bool:
+    """HTTPS to any host, or HTTP to an exact local host.
+
+    A prefix check would accept ``http://localhost.example.com`` or
+    ``http://localhost@example.com`` and send the key plus identifiable
+    inputs in cleartext off the machine. Embedded credentials are refused
+    on every scheme: base_url is shown in the UI and the audit trail.
+    """
+
+    if any(character.isspace() for character in base_url):
+        return False
+    try:
+        parsed = urlsplit(base_url)
+        parsed.port  # noqa: B018 - raises ValueError for an invalid port
+    except ValueError:
+        return False
+    if not parsed.hostname or "@" in parsed.netloc:
+        return False
+    if parsed.scheme == "https":
+        return True
+    return parsed.scheme == "http" and parsed.hostname in LOCAL_PROVIDER_HOSTS
 
 
 def get_provider_setting(
@@ -102,7 +131,7 @@ def save_provider_setting(
         raise ProviderConfigRejected(
             f"Adapter {MINERU_ADAPTER} is only valid for slot {MINERU_PROVIDER_SLOT}"
         )
-    if not base_url.strip().startswith(("https://", "http://127.0.0.1", "http://localhost")):
+    if not _is_allowed_base_url(base_url.strip()):
         raise ProviderConfigRejected(
             "base_url must be HTTPS, or an explicit localhost endpoint for a local "
             "provider such as Ollama"
@@ -151,6 +180,15 @@ def resolve_provider_params(session: Session, slot: str = PROVIDER_SLOT) -> dict
 
     setting = get_provider_setting(session, slot)
     if setting is None or not setting.enabled:
+        return None
+    if not _is_allowed_base_url(setting.base_url):
+        # A row saved before the stricter check (or edited by hand) must not
+        # reach a cleartext remote endpoint; behave as unconfigured.
+        logger.warning(
+            "Provider slot %s base_url fails the transport policy; slot stays inactive",
+            slot,
+            extra={"error_code": "PROVIDER_BASE_URL_REJECTED"},
+        )
         return None
     return {
         "slot": setting.slot,
