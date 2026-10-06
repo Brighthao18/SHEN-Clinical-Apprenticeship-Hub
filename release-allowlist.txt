@@ -834,7 +834,7 @@ licenses/npm/side-channel-1.1.1/00-LICENSE
 licenses/npm/side-channel-list-1.0.1/00-LICENSE
 licenses/npm/side-channel-map-1.0.1/00-LICENSE
 licenses/npm/side-channel-weakmap-1.0.2/00-LICENSE
-licenses/npm/source-map-js-1.2.1/00-LICENSE
+licenses/npm/source-map-js-1.2.2/00-LICENSE
 licenses/npm/stable-hash-0.0.5/00-LICENSE-REFERENCE.txt
 licenses/npm/stable-hash-0.0.5/01-PACKAGE-METADATA.json
 licenses/npm/stable-hash-0.0.5/02-PUBLISHED-README.md

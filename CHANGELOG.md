@@ -7,6 +7,7 @@
 - Validate provider `base_url` by parsed scheme and exact host instead of a string prefix: lookalikes such as `http://localhost.example.com` or `http://localhost@example.com` and URLs with embedded credentials are rejected, and a stored slot that fails the rule resolves as unconfigured.
 - Report an unreachable or failing API on the Web login as unavailable (503/502) rather than as a wrong password or an unhandled error, and return a JSON 502 from the backend proxy when the API cannot be reached.
 - Add authentication tests and a Web login exchange unit test.
+- Override `source-map-js` to 1.2.2 for GHSA-68fv-2mgg-jv7q (production path next -> postcss) and update only that component's inventory, SBOM and license entry.
 
 Clinical ingestion, matching, dose calculations, deterministic prescription comparison and append-only writing behavior are unchanged. No schema migration is added.
 

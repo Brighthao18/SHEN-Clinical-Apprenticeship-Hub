@@ -3,7 +3,7 @@
   "generated_date": "2026-10-05",
   "scope": "Python runtime/dev and all pnpm lock packages, including platform-optional packages",
   "locks": {
-    "pnpm-lock.yaml": "77722b43cf639333facaa73b57bad1134ceb75c2df541df43a4fcc9a7569e4bf",
+    "pnpm-lock.yaml": "bd73cdba7793fb08a4857a4e9adbbd3a7ac8e729d8d535747d6127a1d2688b05",
     "apps/api/requirements.lock": "6d77507bf8c98c11f00118a5a76636bc87cef4d2828b195ee7ad070a1bcb46d4",
     "apps/api/requirements-dev.lock": "8cc5206215276ec8332315ab4fe13072c496eb83a88c4b7afffe94c8b3d39dae"
   },
@@ -7019,18 +7019,18 @@
     {
       "ecosystem": "npm",
       "name": "source-map-js",
-      "version": "1.2.1",
+      "version": "1.2.2",
       "license": "BSD-3-Clause",
-      "metadata_source": "https://registry.npmjs.org/source-map-js/1.2.1",
-      "artifact_sha256": "f126a6f9fca487a43219d8cb8c3a955279187a966119d548eb5cd47e999d4853",
-      "lock_integrity": "sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA==",
+      "metadata_source": "https://registry.npmjs.org/source-map-js/1.2.2",
+      "artifact_sha256": "05c8cf8e7c3a6b56cada7668fe9342b10f4b625efc92aba9ba05b9e8fe4d71a3",
+      "lock_integrity": "sha512-KGj/8Y43x35aZVDtt+J4mK1hoLGHULMYfSkODJNQjNDC3oW1PqPoxMwo0pLUsWM/UEGzON/NxeHywEfNXNP3Vw==",
       "license_files": [
         {
-          "path": "licenses/npm/source-map-js-1.2.1/00-LICENSE",
+          "path": "licenses/npm/source-map-js-1.2.2/00-LICENSE",
           "sha256": "6cb0631f71c7749763fd3dd1d5bee52dd1070ec17f2edc1710079ad070bd2fbd"
         }
       ],
-      "purl": "pkg:npm/source-map-js@1.2.1"
+      "purl": "pkg:npm/source-map-js@1.2.2"
     },
     {
       "ecosystem": "npm",
