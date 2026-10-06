@@ -23,13 +23,24 @@ async function proxy(request: NextRequest, context: RouteContext) {
   if (contentType) headers.set("Content-Type", contentType);
 
   const hasBody = !["GET", "HEAD"].includes(request.method);
-  const upstream = await fetch(target, {
-    method: request.method,
-    headers,
-    body: hasBody ? await request.arrayBuffer() : undefined,
-    cache: "no-store",
-    redirect: "manual",
-  });
+  let upstream: Response;
+  try {
+    upstream = await fetch(target, {
+      method: request.method,
+      headers,
+      body: hasBody ? await request.arrayBuffer() : undefined,
+      cache: "no-store",
+      redirect: "manual",
+    });
+  } catch {
+    // A JSON 502 instead of an unhandled route error. The request may still
+    // have landed, so callers keep treating it as unconfirmed (5xx is never
+    // a definitive save rejection) and the message says to check first.
+    return Response.json(
+      { detail: "无法连接后端服务，请稍后重试。若刚提交保存或生成，请先核对结果再重试。" },
+      { status: 502, headers: { "Cache-Control": "no-store, private" } },
+    );
+  }
   const responseHeaders = new Headers();
   for (const name of ["content-type", "content-disposition", "x-correlation-id"]) {
     const value = upstream.headers.get(name);

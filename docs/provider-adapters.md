@@ -10,7 +10,7 @@
 | 固定抽取 | `app/services/ai/extractor.py` | 按 OCR hash 精确查注册表；未知输入拒绝 |
 | 队列 | `app/workers/celery_app.py` | Redis 协议；任务幂等，结果过期；公开部署使用 Valkey |
 
-设置服务插槽包括 `mineru_ocr`、`clinical_extraction`、`vision_verification`、`longitudinal_analysis`、`apprenticeship_writing`。运行时配置保存在本实例数据库，密钥加密；已配置插槽优先于 bootstrap 环境回退。选择服务不改变临床校验。原图和含身份 OCR 的许可见[隐私边界](privacy-boundaries.md)。扩展一个适配器需明确输入、输出、超时、重试、错误码、schema 和许可，并用完全合成反例验证；本版不新增通用插件框架。
+设置服务插槽包括 `mineru_ocr`、`clinical_extraction`、`vision_verification`、`longitudinal_analysis`、`apprenticeship_writing`。运行时配置保存在本实例数据库，密钥加密；已配置插槽优先于 bootstrap 环境回退。服务地址须为 HTTPS；明文 HTTP 只接受主机名恰为 `localhost` 或 `127.0.0.1` 的本机服务（如 Ollama），地址中不得含账号密码；不符合的已存插槽在运行时按未配置处理，需在设置页改正。选择服务不改变临床校验。原图和含身份 OCR 的许可见[隐私边界](privacy-boundaries.md)。扩展一个适配器需明确输入、输出、超时、重试、错误码、schema 和许可，并用完全合成反例验证；本版不新增通用插件框架。
 
 ## 只读 API 示例
 

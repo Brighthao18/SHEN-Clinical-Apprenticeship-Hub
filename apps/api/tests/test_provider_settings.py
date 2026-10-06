@@ -9,6 +9,7 @@ inactive/fail-closed).
 
 from __future__ import annotations
 
+import pytest
 from sqlalchemy import func, select, text
 
 from app.core.config import get_settings
@@ -414,3 +415,72 @@ def test_patch_toggles_enabled_state_without_deleting_credentials(
     assert missing.status_code == 404
 
     client.delete("/api/v1/settings/ai-provider", headers=auth_headers)
+
+
+@pytest.mark.parametrize(
+    "base_url",
+    [
+        "https://open.bigmodel.cn/api/paas/v4",
+        "HTTPS://api.deepseek.com",
+        "http://127.0.0.1:11434/v1",
+        "http://localhost:11434/v1",
+        "http://LOCALHOST:11434/v1",
+    ],
+)
+def test_put_accepts_https_or_exact_local_http(client, auth_headers, base_url: str) -> None:
+    response = _put(
+        client, auth_headers, {**PAYLOAD, "slot": "longitudinal_analysis", "base_url": base_url}
+    )
+    assert response.status_code == 200, response.text
+
+
+@pytest.mark.parametrize(
+    "base_url",
+    [
+        # Cleartext to a remote host that merely starts like a local one.
+        "http://localhost.attacker.example/v1",
+        "http://localhost@attacker.example/v1",
+        "http://127.0.0.1.attacker.example/v1",
+        "http://127.0.0.1@attacker.example/v1",
+        "http://localhostattacker.example",
+        "http://api.deepseek.com",
+        "http://[::1]:11434/v1",
+        # Credentials would be echoed to the UI and the audit trail.
+        "https://user:secret@api.deepseek.com",
+        # No usable host, port or scheme.
+        "https://",
+        "https://:443/v1",
+        "http://localhost:99999/v1",
+        "https://api.deep seek.com",
+        "ftp://localhost/v1",
+        "localhost:11434/v1",
+    ],
+)
+def test_put_rejects_cleartext_remote_or_malformed_base_url(
+    client, auth_headers, base_url: str
+) -> None:
+    response = _put(
+        client, auth_headers, {**PAYLOAD, "slot": "longitudinal_analysis", "base_url": base_url}
+    )
+    assert response.status_code == 422, response.text
+    assert "base_url must be HTTPS" in response.json()["detail"]
+    with SessionLocal() as session:
+        assert session.scalar(select(func.count(ProviderSetting.id))) == 0
+
+
+def test_stored_cleartext_remote_base_url_resolves_inactive(client, auth_headers) -> None:
+    from app.services.ai.provider_config import resolve_provider_params
+
+    saved = _put(client, auth_headers, {**PAYLOAD, "slot": "longitudinal_analysis"})
+    assert saved.status_code == 200
+    with SessionLocal() as session:
+        # A row written before the stricter check, or edited by hand.
+        session.execute(
+            text("UPDATE provider_settings SET base_url = 'http://localhost.attacker.example'")
+        )
+        session.commit()
+        assert resolve_provider_params(session, "longitudinal_analysis") is None
+        assert get_longitudinal_analysis_provider(session) is None
+    # The slot stays visible so the user can correct it in settings.
+    fetched = client.get("/api/v1/settings/ai-provider", headers=auth_headers).json()
+    assert fetched["slots"]["longitudinal_analysis"]["configured"] is True

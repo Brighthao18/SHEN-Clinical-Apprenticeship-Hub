@@ -10257,9 +10257,9 @@
     {
       "type": "library",
       "name": "source-map-js",
-      "version": "1.2.1",
-      "bom-ref": "pkg:npm/source-map-js@1.2.1",
-      "purl": "pkg:npm/source-map-js@1.2.1",
+      "version": "1.2.2",
+      "bom-ref": "pkg:npm/source-map-js@1.2.2",
+      "purl": "pkg:npm/source-map-js@1.2.2",
       "licenses": [
         {
           "license": {
@@ -10270,13 +10270,13 @@
       "externalReferences": [
         {
           "type": "distribution",
-          "url": "https://registry.npmjs.org/source-map-js/1.2.1"
+          "url": "https://registry.npmjs.org/source-map-js/1.2.2"
         }
       ],
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "f126a6f9fca487a43219d8cb8c3a955279187a966119d548eb5cd47e999d4853"
+          "content": "05c8cf8e7c3a6b56cada7668fe9342b10f4b625efc92aba9ba05b9e8fe4d71a3"
         }
       ]
     },

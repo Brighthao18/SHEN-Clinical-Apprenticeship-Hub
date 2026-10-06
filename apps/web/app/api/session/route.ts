@@ -1,36 +1,30 @@
 import { NextRequest, NextResponse } from "next/server";
 
+import { exchangeCredentials } from "@/lib/session-login";
+
 const COOKIE_NAME = "shen_session";
 
 export async function POST(request: NextRequest) {
-  const payload = (await request.json()) as { username?: string; password?: string };
-  if (!payload.username || !payload.password) {
-    return NextResponse.json({ detail: "请输入用户名和密码" }, { status: 422 });
+  let payload: unknown = null;
+  try {
+    payload = await request.json();
+  } catch {
+    // Malformed body: exchangeCredentials answers 422 for missing fields.
   }
-  const form = new URLSearchParams({
-    username: payload.username,
-    password: payload.password,
-  });
-  const upstream = await fetch(
+  const result = await exchangeCredentials(
+    payload,
     `${process.env.API_INTERNAL_URL ?? "http://localhost:8000"}/api/v1/auth/token`,
-    {
-      method: "POST",
-      body: form,
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      cache: "no-store",
-    },
   );
-  const body = await upstream.json();
-  if (!upstream.ok) {
-    return NextResponse.json({ detail: "用户名或密码不正确" }, { status: upstream.status });
+  if (!result.ok) {
+    return NextResponse.json({ detail: result.detail }, { status: result.status });
   }
   const response = NextResponse.json({ ok: true });
-  response.cookies.set(COOKIE_NAME, body.access_token, {
+  response.cookies.set(COOKIE_NAME, result.token, {
     httpOnly: true,
     sameSite: "lax",
     secure: process.env.COOKIE_SECURE === "true",
     path: "/",
-    maxAge: body.expires_in,
+    maxAge: result.expiresIn,
   });
   return response;
 }

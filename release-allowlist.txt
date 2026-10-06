@@ -120,6 +120,7 @@ apps/api/tests/fixtures/prescription_diff_longitudinal.json
 apps/api/tests/test_ai_extraction.py
 apps/api/tests/test_ai_gateway.py
 apps/api/tests/test_apprenticeship_notes.py
+apps/api/tests/test_auth.py
 apps/api/tests/test_backup_status.py
 apps/api/tests/test_calibration.py
 apps/api/tests/test_calibration_branches.py
@@ -230,6 +231,7 @@ apps/web/lib/note-version-merge.ts
 apps/web/lib/pending-save-checks.ts
 apps/web/lib/request-generation.ts
 apps/web/lib/save-request.ts
+apps/web/lib/session-login.ts
 apps/web/lib/student-note-buffer.ts
 apps/web/lib/use-pending-save-channel.ts
 apps/web/lib/workspace-auth.ts
@@ -258,6 +260,7 @@ apps/web/tests/pending-save-round.test.mjs
 apps/web/tests/request-generation.test.mjs
 apps/web/tests/run-lock.test.mjs
 apps/web/tests/save-request.test.mjs
+apps/web/tests/session-login.test.mjs
 apps/web/tests/student-note-buffer.test.mjs
 apps/web/tsconfig.json
 compose.demo.yaml
@@ -831,7 +834,7 @@ licenses/npm/side-channel-1.1.1/00-LICENSE
 licenses/npm/side-channel-list-1.0.1/00-LICENSE
 licenses/npm/side-channel-map-1.0.1/00-LICENSE
 licenses/npm/side-channel-weakmap-1.0.2/00-LICENSE
-licenses/npm/source-map-js-1.2.1/00-LICENSE
+licenses/npm/source-map-js-1.2.2/00-LICENSE
 licenses/npm/stable-hash-0.0.5/00-LICENSE-REFERENCE.txt
 licenses/npm/stable-hash-0.0.5/01-PACKAGE-METADATA.json
 licenses/npm/stable-hash-0.0.5/02-PUBLISHED-README.md

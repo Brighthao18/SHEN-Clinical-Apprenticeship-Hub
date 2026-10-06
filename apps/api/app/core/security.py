@@ -40,13 +40,19 @@ def _verify_hash(password: str, encoded: str) -> bool:
         return False
 
 
+def _constant_time_equals(supplied: str, expected: str) -> bool:
+    # compare_digest raises TypeError for non-ASCII str (e.g. a Chinese
+    # username); comparing UTF-8 bytes keeps it constant-time and a 401.
+    return secrets.compare_digest(supplied.encode("utf-8"), expected.encode("utf-8"))
+
+
 def verify_admin_credentials(username: str, password: str) -> bool:
     settings = get_settings()
-    username_ok = secrets.compare_digest(username, settings.app_admin_username)
+    username_ok = _constant_time_equals(username, settings.app_admin_username)
     if settings.app_admin_password_hash:
         password_ok = _verify_hash(password, settings.app_admin_password_hash)
     else:
-        password_ok = secrets.compare_digest(password, settings.app_admin_password)
+        password_ok = _constant_time_equals(password, settings.app_admin_password)
     return username_ok and password_ok
 
 
@@ -68,7 +74,14 @@ def get_current_user(token: Annotated[str | None, Depends(oauth2_scheme)]) -> st
     if not token:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
     try:
-        payload = jwt.decode(token, settings.jwt_secret, algorithms=["HS256"])
+        # PyJWT only checks exp when present; every token we issue carries
+        # these claims, so a token without them was never minted here.
+        payload = jwt.decode(
+            token,
+            settings.jwt_secret,
+            algorithms=["HS256"],
+            options={"require": ["exp", "iat", "sub"]},
+        )
         subject = payload.get("sub")
         if subject != settings.app_admin_username:
             raise InvalidTokenError("unexpected subject")
